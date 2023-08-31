@@ -47,55 +47,58 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     tab.wait_until_navigated()?;
 
-    let js_code = r#"
+    let names = r#"
     (function () {
-        return PeopleNames.join(",") + "|" + AvailableAtSlot.map((slotData, i) => {
+        return PeopleNames.join(",")
+    })();
+    "#;
+
+    let names = tab.evaluate(names, false)?;
+
+    let names = names.value.unwrap().to_string();
+
+    let names = &names[1..names.len() - 1];
+
+    let names: Vec<&str> = names.split(',').collect();
+
+    let avail_matrix = r#"
+    (function () {
+        return AvailableAtSlot.map((slotData, i) => {
             return `${TimeOfSlot[i]},${PeopleIDs.map(id => slotData.includes(id) ? 1 : 0).join(",")}`;
         }).join("|");
     })();
     "#;
 
-    let evaluate_response = tab.evaluate(js_code, false)?;
+    let avail_matrix = tab.evaluate(avail_matrix, false)?;
 
-    let evaluate_response = evaluate_response.value.unwrap().to_string();
+    let avail_matrix = avail_matrix.value.unwrap().to_string();
 
-    let evaluate_response = &evaluate_response[1..evaluate_response.len() - 1];
+    let avail_matrix = &avail_matrix[1..avail_matrix.len() - 1];
 
-    print!("{}", evaluate_response);
+    let sections: Vec<&str> = avail_matrix.split('|').collect();
 
-    let mut parts = evaluate_response.split('|');
-    let names = parts.next().unwrap();
-    let slots_data = parts.next().unwrap();
+    let mut slots = Vec::new();
 
-    let names = names.split(',').collect::<Vec<&str>>();
-    let slots = slots_data
-        .split('|')
-        .filter(|s| !s.is_empty())
-        .map(|s| {
-            let mut values = s.split(',');
+    for section in sections {
+        let mut parts = section.split(',');
 
-            let timestamp_str = values.next().unwrap();
+        let timestamp_str = parts.next().unwrap();
+        let timestamp = DateTime::parse_from_str(timestamp_str, "%s")
+            .unwrap()
+            .with_timezone(&Utc);
 
-            let format = "%s";
-            let datetime = DateTime::parse_from_str(timestamp_str, format).unwrap();
+        let mut people = Vec::new();
+        for (name, available) in names.iter().zip(parts) {
+            let available = available == "1";
 
-            let timestamp = datetime.with_timezone(&Utc);
+            people.push(Person {
+                name: name.to_string(),
+                available,
+            });
+        }
 
-            let people = values
-                .zip(names.iter())
-                .map(|(val, name)| Person {
-                    name: name.to_string(),
-                    available: match val {
-                        "1" => true,
-                        "0" => false,
-                        _ => unreachable!("impossible based on JS"),
-                    },
-                })
-                .collect();
-
-            Slot { timestamp, people }
-        })
-        .collect::<Vec<Slot>>();
+        slots.push(Slot { timestamp, people });
+    }
 
     println!("{:#?}", slots);
 
