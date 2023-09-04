@@ -85,13 +85,13 @@ fn process_names_and_matrix(
 
         let timestamp_str = match parts.next() {
             Some(timestamp) => timestamp,
-            None => return Err(ProcessResultError::AvailMatrixNext { section }),
+            None => return Err(ProcessResultError::AvailMatrixNoNext { section }),
         };
 
         let timestamp = match DateTime::parse_from_str(timestamp_str, "%s") {
             Ok(timestamp) => timestamp.with_timezone(&Utc),
             Err(_) => {
-                return Err(ProcessResultError::AvailMatrixTimestampParse {
+                return Err(ProcessResultError::AvailMatrixFailedTimestampParse {
                     timestamp: timestamp_str.to_string(),
                 })
             }
@@ -179,15 +179,17 @@ fn parse_avail_matrix_from_result(raw_avail_matrix: String) -> Result<Vec<String
 
 #[cfg(test)]
 mod tests {
-    use crate::fetch_availability::errors::ParseError;
+    use crate::fetch_availability::errors::{ParseError, ProcessResultError};
+    use crate::fetch_availability::model::{Person, Slot};
     use crate::fetch_availability::parse::{
-        parse_avail_matrix_from_result, parse_people_names_from_result,
+        parse_avail_matrix_from_result, parse_people_names_from_result, process_names_and_matrix,
     };
+    use chrono::{DateTime, Utc};
     use claims::{assert_err, assert_ok};
 
     #[test]
     fn test_parse_avail_matrix_from_result_valid_str() {
-        let raw_avail_matrix = "'1693746000,0,0,0,0,0,0,0,0,0,0,0,0,0|1693746900,0,0,0,0,0,0,0,0,0,0,0,0,0|1693747800,0,0,0,0,0,0,0,0,0,0,0,0,0'".to_string();
+        let raw_avail_matrix = "'1693746000,0,0,0|1693746900,1,0,0|1693747800,0,1,0'".to_string();
 
         let avail_matrix = parse_avail_matrix_from_result(raw_avail_matrix);
 
@@ -196,9 +198,9 @@ mod tests {
         let avail_matrix = avail_matrix.unwrap();
 
         assert!(avail_matrix.len() == 3);
-        assert!(avail_matrix[0] == "1693746000,0,0,0,0,0,0,0,0,0,0,0,0,0");
-        assert!(avail_matrix[1] == "1693746900,0,0,0,0,0,0,0,0,0,0,0,0,0");
-        assert!(avail_matrix[2] == "1693747800,0,0,0,0,0,0,0,0,0,0,0,0,0");
+        assert!(avail_matrix[0] == "1693746000,0,0,0");
+        assert!(avail_matrix[1] == "1693746900,1,0,0");
+        assert!(avail_matrix[2] == "1693747800,0,1,0");
     }
 
     #[test]
@@ -215,7 +217,7 @@ mod tests {
     }
 
     #[test]
-    fn test_pparse_people_names_from_result_valid_str() {
+    fn test_parse_people_names_from_result_valid_str() {
         let raw_names = "'Muneer,Brian,Garrett'".to_string();
 
         let names = parse_people_names_from_result(raw_names);
@@ -231,7 +233,7 @@ mod tests {
     }
 
     #[test]
-    fn test_pparse_people_names_from_result_invalid_str() {
+    fn test_parse_people_names_from_result_invalid_str() {
         let raw_names = "''".to_string();
 
         let names = parse_people_names_from_result(raw_names);
@@ -241,5 +243,118 @@ mod tests {
         let names = names.unwrap_err();
 
         assert!(matches!(names, ParseError::EmptyRaw));
+    }
+
+    #[test]
+    fn test_process_names_and_matrix_valid() {
+        let names = vec![
+            "Muneer".to_string(),
+            "Brian".to_string(),
+            "Garrett".to_string(),
+        ];
+
+        let avail_matrix = vec![
+            "1693746000,0,0,0".to_string(),
+            "1693746900,1,0,0".to_string(),
+            "1693747800,0,1,0".to_string(),
+        ];
+
+        let slots = process_names_and_matrix(names, avail_matrix);
+
+        assert_ok!(&slots);
+
+        let slots = slots.unwrap();
+
+        assert!(slots.len() == 3);
+        assert!(
+            slots[0]
+                == Slot {
+                    timestamp: DateTime::parse_from_str("1693746000", "%s")
+                        .unwrap()
+                        .with_timezone(&Utc),
+                    people: vec![
+                        Person {
+                            name: "Muneer".to_string(),
+                            available: false
+                        },
+                        Person {
+                            name: "Brian".to_string(),
+                            available: false
+                        },
+                        Person {
+                            name: "Garrett".to_string(),
+                            available: false
+                        }
+                    ]
+                }
+        );
+        assert!(
+            slots[1]
+                == Slot {
+                    timestamp: DateTime::parse_from_str("1693746900", "%s")
+                        .unwrap()
+                        .with_timezone(&Utc),
+                    people: vec![
+                        Person {
+                            name: "Muneer".to_string(),
+                            available: true
+                        },
+                        Person {
+                            name: "Brian".to_string(),
+                            available: false
+                        },
+                        Person {
+                            name: "Garrett".to_string(),
+                            available: false
+                        }
+                    ]
+                }
+        );
+        assert!(
+            slots[2]
+                == Slot {
+                    timestamp: DateTime::parse_from_str("1693747800", "%s")
+                        .unwrap()
+                        .with_timezone(&Utc),
+                    people: vec![
+                        Person {
+                            name: "Muneer".to_string(),
+                            available: false
+                        },
+                        Person {
+                            name: "Brian".to_string(),
+                            available: true
+                        },
+                        Person {
+                            name: "Garrett".to_string(),
+                            available: false
+                        }
+                    ]
+                }
+        );
+    }
+
+    #[test]
+    fn test_process_names_and_matrix_bad_timestamp() {
+        let names = vec![
+            "Muneer".to_string(),
+            "Brian".to_string(),
+            "Garrett".to_string(),
+        ];
+
+        let avail_matrix = vec!["".to_string()];
+
+        let slots = process_names_and_matrix(names, avail_matrix);
+
+        assert_err!(&slots);
+
+        let slots = slots.unwrap_err();
+
+        assert_eq!(
+            slots,
+            ProcessResultError::AvailMatrixFailedTimestampParse {
+                timestamp: "".to_string(),
+            }
+        );
     }
 }

@@ -28,23 +28,23 @@ impl std::fmt::Display for FetchError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum ProcessResultError {
-    AvailMatrixNext { section: String },
-    AvailMatrixTimestampParse { timestamp: String },
+    AvailMatrixNoNext { section: String },
+    AvailMatrixFailedTimestampParse { timestamp: String },
 }
 
 impl std::fmt::Display for ProcessResultError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            ProcessResultError::AvailMatrixNext { section } => {
+            ProcessResultError::AvailMatrixNoNext { section } => {
                 write!(
                     f,
                     "Failed to get next part of availability matrix: {:?}",
                     section
                 )
             }
-            ProcessResultError::AvailMatrixTimestampParse { timestamp } => write!(
+            ProcessResultError::AvailMatrixFailedTimestampParse { timestamp } => write!(
                 f,
                 "Failed to parse timestamp from availability matrix: {}",
                 timestamp
