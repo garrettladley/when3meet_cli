@@ -7,7 +7,7 @@ use headless_chrome::{Browser, Tab};
 use std::sync::Arc;
 use url::Url;
 
-fn parse_when2meet(url: Url) -> Result<Vec<Slot>, ParseWhen2MeetError> {
+pub fn parse_when2meet(url: &Url) -> Result<Vec<Slot>, ParseWhen2MeetError> {
     let browser = match Browser::default() {
         Ok(browser) => browser,
         Err(_) => {
