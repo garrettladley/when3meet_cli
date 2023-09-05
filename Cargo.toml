@@ -16,7 +16,7 @@ headless_chrome = { git = "https://github.com/atroche/rust-headless-chrome", fea
     "fetch",
 ] }
 url = "2.4"
-chrono = "0.4"
+chrono = { version = "0.4.29", default-features = false, features = ["clock"] }
 chrono-tz = "0.8.3"
 iana-time-zone = "0.1.57"
 anyhow = "1.0.75"
