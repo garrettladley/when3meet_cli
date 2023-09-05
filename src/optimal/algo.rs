@@ -22,10 +22,9 @@ fn find_opt(slots: &[Slot], required_people: &[String], flexible_naming: &bool) 
             required_people.iter().all(|required_name| {
                 slot.people.iter().any(|slot_person| {
                     let name_match = if *flexible_naming {
-                        slot_person
-                            .name
+                        required_name
                             .to_lowercase()
-                            .contains(&required_name.to_lowercase())
+                            .contains(&slot_person.name.to_lowercase())
                     } else {
                         slot_person.name == *required_name
                     };
@@ -108,6 +107,316 @@ mod tests {
         let required_people = vec!["Muneer".to_string(), "Brian".to_string()];
 
         let flexible_naming = false;
+
+        let opt = find_opt(&slots, &required_people, &flexible_naming);
+
+        assert_eq!(opt.len(), 1);
+
+        assert_eq!(opt[0].timestamp.timestamp(), 1693747800);
+
+        assert_eq!(opt[0].people.len(), 3);
+
+        assert!(
+            opt[0]
+                .people
+                .iter()
+                .find(|person| person.name == *"Muneer")
+                .unwrap()
+                .available
+        );
+
+        assert!(
+            opt[0]
+                .people
+                .iter()
+                .find(|person| person.name == *"Brian")
+                .unwrap()
+                .available
+        );
+    }
+
+    #[test]
+    fn test_find_opt_no_opt() {
+        let slots = vec![
+            Slot {
+                timestamp: DateTime::parse_from_str("1693746000", "%s")
+                    .unwrap()
+                    .with_timezone(&Utc),
+                people: vec![
+                    Person {
+                        name: "Muneer".to_string(),
+                        available: false,
+                    },
+                    Person {
+                        name: "Brian".to_string(),
+                        available: false,
+                    },
+                    Person {
+                        name: "Garrett".to_string(),
+                        available: false,
+                    },
+                ],
+            },
+            Slot {
+                timestamp: DateTime::parse_from_str("1693746900", "%s")
+                    .unwrap()
+                    .with_timezone(&Utc),
+                people: vec![
+                    Person {
+                        name: "Muneer".to_string(),
+                        available: false,
+                    },
+                    Person {
+                        name: "Brian".to_string(),
+                        available: false,
+                    },
+                    Person {
+                        name: "Garrett".to_string(),
+                        available: false,
+                    },
+                ],
+            },
+            Slot {
+                timestamp: DateTime::parse_from_str("1693747800", "%s")
+                    .unwrap()
+                    .with_timezone(&Utc),
+                people: vec![
+                    Person {
+                        name: "Muneer".to_string(),
+                        available: false,
+                    },
+                    Person {
+                        name: "Brian".to_string(),
+                        available: false,
+                    },
+                    Person {
+                        name: "Garrett".to_string(),
+                        available: false,
+                    },
+                ],
+            },
+        ];
+
+        let required_people = vec!["Muneer".to_string(), "Brian".to_string()];
+
+        let flexible_naming = false;
+
+        let opt = find_opt(&slots, &required_people, &flexible_naming);
+
+        assert!(opt.is_empty());
+    }
+
+    #[test]
+    fn test_find_opt_multiple_opts() {
+        let slots = vec![
+            Slot {
+                timestamp: DateTime::parse_from_str("1693746000", "%s")
+                    .unwrap()
+                    .with_timezone(&Utc),
+                people: vec![
+                    Person {
+                        name: "Muneer".to_string(),
+                        available: true,
+                    },
+                    Person {
+                        name: "Brian".to_string(),
+                        available: true,
+                    },
+                    Person {
+                        name: "Garrett".to_string(),
+                        available: true,
+                    },
+                ],
+            },
+            Slot {
+                timestamp: DateTime::parse_from_str("1693746900", "%s")
+                    .unwrap()
+                    .with_timezone(&Utc),
+                people: vec![
+                    Person {
+                        name: "Muneer".to_string(),
+                        available: true,
+                    },
+                    Person {
+                        name: "Brian".to_string(),
+                        available: true,
+                    },
+                    Person {
+                        name: "Garrett".to_string(),
+                        available: true,
+                    },
+                ],
+            },
+            Slot {
+                timestamp: DateTime::parse_from_str("1693747800", "%s")
+                    .unwrap()
+                    .with_timezone(&Utc),
+                people: vec![
+                    Person {
+                        name: "Muneer".to_string(),
+                        available: true,
+                    },
+                    Person {
+                        name: "Brian".to_string(),
+                        available: true,
+                    },
+                    Person {
+                        name: "Garrett".to_string(),
+                        available: true,
+                    },
+                ],
+            },
+        ];
+
+        let required_people = vec!["Muneer".to_string(), "Brian".to_string()];
+
+        let flexible_naming = false;
+
+        let opt = find_opt(&slots, &required_people, &flexible_naming);
+
+        assert_eq!(opt, slots);
+    }
+
+    #[test]
+    fn test_find_opt_not_all_required_people_available() {
+        let slots = vec![
+            Slot {
+                timestamp: DateTime::parse_from_str("1693746000", "%s")
+                    .unwrap()
+                    .with_timezone(&Utc),
+                people: vec![
+                    Person {
+                        name: "Muneer".to_string(),
+                        available: true,
+                    },
+                    Person {
+                        name: "Brian".to_string(),
+                        available: true,
+                    },
+                    Person {
+                        name: "Garrett".to_string(),
+                        available: false,
+                    },
+                ],
+            },
+            Slot {
+                timestamp: DateTime::parse_from_str("1693746900", "%s")
+                    .unwrap()
+                    .with_timezone(&Utc),
+                people: vec![
+                    Person {
+                        name: "Muneer".to_string(),
+                        available: true,
+                    },
+                    Person {
+                        name: "Brian".to_string(),
+                        available: true,
+                    },
+                    Person {
+                        name: "Garrett".to_string(),
+                        available: false,
+                    },
+                ],
+            },
+            Slot {
+                timestamp: DateTime::parse_from_str("1693747800", "%s")
+                    .unwrap()
+                    .with_timezone(&Utc),
+                people: vec![
+                    Person {
+                        name: "Muneer".to_string(),
+                        available: true,
+                    },
+                    Person {
+                        name: "Brian".to_string(),
+                        available: true,
+                    },
+                    Person {
+                        name: "Garrett".to_string(),
+                        available: false,
+                    },
+                ],
+            },
+        ];
+
+        let required_people = vec![
+            "Muneer".to_string(),
+            "Brian".to_string(),
+            "Garrett".to_string(),
+        ];
+
+        let flexible_naming = false;
+
+        let opt = find_opt(&slots, &required_people, &flexible_naming);
+
+        assert!(opt.is_empty());
+    }
+
+    #[test]
+    fn test_find_opt_flexible_naming() {
+        let slots = vec![
+            Slot {
+                timestamp: DateTime::parse_from_str("1693746000", "%s")
+                    .unwrap()
+                    .with_timezone(&Utc),
+                people: vec![
+                    Person {
+                        name: "Muneer".to_string(),
+                        available: false,
+                    },
+                    Person {
+                        name: "Brian".to_string(),
+                        available: false,
+                    },
+                    Person {
+                        name: "Garrett".to_string(),
+                        available: false,
+                    },
+                ],
+            },
+            Slot {
+                timestamp: DateTime::parse_from_str("1693746900", "%s")
+                    .unwrap()
+                    .with_timezone(&Utc),
+                people: vec![
+                    Person {
+                        name: "Muneer".to_string(),
+                        available: true,
+                    },
+                    Person {
+                        name: "Brian".to_string(),
+                        available: false,
+                    },
+                    Person {
+                        name: "Garrett".to_string(),
+                        available: false,
+                    },
+                ],
+            },
+            Slot {
+                timestamp: DateTime::parse_from_str("1693747800", "%s")
+                    .unwrap()
+                    .with_timezone(&Utc),
+                people: vec![
+                    Person {
+                        name: "Muneer".to_string(),
+                        available: true,
+                    },
+                    Person {
+                        name: "Brian".to_string(),
+                        available: true,
+                    },
+                    Person {
+                        name: "Garrett".to_string(),
+                        available: false,
+                    },
+                ],
+            },
+        ];
+
+        let required_people = vec![" mUnEeR lAlJi ".to_string(), " reicher, brian".to_string()];
+
+        let flexible_naming = true;
 
         let opt = find_opt(&slots, &required_people, &flexible_naming);
 
