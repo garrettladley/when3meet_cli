@@ -83,16 +83,16 @@ fn process_names_and_matrix(
     for section in avail_matrix {
         let mut parts = section.split(',');
 
-        let timestamp_str = match parts.next() {
+        let start_timestamp_str = match parts.next() {
             Some(timestamp) => timestamp,
             None => return Err(ProcessResultError::AvailMatrixNoNext { section }),
         };
 
-        let timestamp = match DateTime::parse_from_str(timestamp_str, "%s") {
+        let start_timestamp = match DateTime::parse_from_str(start_timestamp_str, "%s") {
             Ok(timestamp) => timestamp.with_timezone(&Utc),
             Err(_) => {
                 return Err(ProcessResultError::AvailMatrixFailedTimestampParse {
-                    timestamp: timestamp_str.to_string(),
+                    timestamp: start_timestamp_str.to_string(),
                 })
             }
         };
@@ -109,7 +109,7 @@ fn process_names_and_matrix(
             })
             .collect();
 
-        slots.push(Slot { timestamp, people });
+        slots.push(Slot::new(start_timestamp, people));
     }
 
     Ok(slots)
@@ -268,11 +268,11 @@ mod tests {
         assert!(slots.len() == 3);
         assert!(
             slots[0]
-                == Slot {
-                    timestamp: DateTime::parse_from_str("1693746000", "%s")
+                == Slot::new(
+                    DateTime::parse_from_str("1693746000", "%s")
                         .unwrap()
                         .with_timezone(&Utc),
-                    people: vec![
+                    vec![
                         Person {
                             name: "Muneer".to_string(),
                             available: false
@@ -286,15 +286,15 @@ mod tests {
                             available: false
                         }
                     ]
-                }
+                )
         );
         assert!(
             slots[1]
-                == Slot {
-                    timestamp: DateTime::parse_from_str("1693746900", "%s")
+                == Slot::new(
+                    DateTime::parse_from_str("1693746900", "%s")
                         .unwrap()
                         .with_timezone(&Utc),
-                    people: vec![
+                    vec![
                         Person {
                             name: "Muneer".to_string(),
                             available: true
@@ -308,15 +308,15 @@ mod tests {
                             available: false
                         }
                     ]
-                }
+                )
         );
         assert!(
             slots[2]
-                == Slot {
-                    timestamp: DateTime::parse_from_str("1693747800", "%s")
+                == Slot::new(
+                    DateTime::parse_from_str("1693747800", "%s")
                         .unwrap()
                         .with_timezone(&Utc),
-                    people: vec![
+                    vec![
                         Person {
                             name: "Muneer".to_string(),
                             available: false
@@ -330,7 +330,7 @@ mod tests {
                             available: false
                         }
                     ]
-                }
+                )
         );
     }
 
