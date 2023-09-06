@@ -31,6 +31,10 @@ pub fn find_opt(slots: &[Slot], required_people: &[String], flexible_naming: &bo
             .max()
             .unwrap_or(0);
 
+        if max_available_count == 0 {
+            return vec![];
+        }
+
         slots
             .iter()
             .filter(|slot| {
