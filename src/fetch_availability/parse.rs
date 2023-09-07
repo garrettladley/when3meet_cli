@@ -71,7 +71,7 @@ pub fn parse_when2meet(url: &Url) -> Result<Vec<Slot>, ParseWhen2MeetError> {
         }
     };
 
-    Ok(fold(slots))
+    Ok(slots)
 }
 
 fn process_names_and_matrix(
@@ -112,7 +112,7 @@ fn process_names_and_matrix(
         slots.push(Slot::new(start_timestamp, people));
     }
 
-    Ok(slots)
+    Ok(fold(slots))
 }
 
 fn fetch_people_names(tab: &Arc<Tab>) -> Result<String, FetchError> {
