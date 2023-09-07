@@ -100,12 +100,9 @@ fn process_names_and_matrix(
         let people = names
             .iter()
             .zip(parts)
-            .map(|(name, available)| {
-                let available = available == "1";
-                Person {
-                    name: name.to_string(),
-                    available,
-                }
+            .map(|(name, available)| Person {
+                name: name.to_string(),
+                available: available == "1",
             })
             .collect();
 
