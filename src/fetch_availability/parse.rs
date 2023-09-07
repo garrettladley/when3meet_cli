@@ -1,7 +1,7 @@
 use crate::fetch_availability::errors::{
     FetchError, HeadlessChromeError, ParseError, ParseWhen2MeetError, ProcessResultError,
 };
-use crate::fetch_availability::model::{Person, Slot};
+use crate::fetch_availability::model::{fold, Person, Slot};
 use chrono::{DateTime, Utc};
 use headless_chrome::{Browser, Tab};
 use std::sync::Arc;
@@ -71,7 +71,7 @@ pub fn parse_when2meet(url: &Url) -> Result<Vec<Slot>, ParseWhen2MeetError> {
         }
     };
 
-    Ok(slots)
+    Ok(fold(slots))
 }
 
 fn process_names_and_matrix(

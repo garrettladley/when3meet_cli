@@ -2,14 +2,14 @@ use chrono::{DateTime, Duration, TimeZone, Utc};
 use chrono_tz::{OffsetName, Tz};
 use iana_time_zone::get_timezone;
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq)]
 pub struct Slot {
     pub start_time: DateTime<Utc>,
     pub end_time: DateTime<Utc>,
     pub people: Vec<Person>,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq)]
 pub struct Person {
     pub name: String,
     pub available: bool,
