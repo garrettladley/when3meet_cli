@@ -82,7 +82,7 @@ jobs:
             bin: target/release/when3meet.exe
           - os: macOS-latest
             target: x86_64-apple-darwin
-            bin: target/release/when3meet.exe
+            bin: target/release/when3meet
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
