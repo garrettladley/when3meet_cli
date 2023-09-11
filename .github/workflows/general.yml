@@ -86,10 +86,8 @@ jobs:
             bin: target/debug/when3meet
     steps:
       - uses: dtolnay/rust-toolchain@stable
-      - uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --manifest-path Cargo.toml --bin when3meet ${{ matrix.args }}
+      - name: Build
+        run: cargo build --manifest-path Cargo.toml --bin when3meet ${{ matrix.args }}
       - uses: Swatinem/rust-cache@v2
         with:
           key: cargo-${{ hashFiles('**/Cargo.lock') }}-${{matrix.target}}
