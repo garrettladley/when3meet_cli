@@ -87,7 +87,7 @@ jobs:
     steps:
       - uses: dtolnay/rust-toolchain@stable
       - name: Foo
-        run: find / -type f -name "Cargo.toml"
+        run: sudo find / -type f -name "Cargo.toml"
 
       - name: Build
         run: cargo build --release --manifest-path ./when3meet/when3meet/Cargo.toml ${{ matrix.args }}
