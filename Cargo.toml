@@ -20,6 +20,7 @@ chrono = { version = "0.4.29", default-features = false, features = ["clock"] }
 chrono-tz = "0.8.3"
 iana-time-zone = "0.1.57"
 anyhow = "1.0.75"
+thiserror = "1.0.48"
 
 [dev-dependencies]
 claims = "0.7.0"

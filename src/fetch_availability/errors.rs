@@ -1,98 +1,47 @@
-#[derive(Debug)]
+use thiserror::Error;
+
+#[derive(Error, Debug)]
 pub enum ParseError {
+    #[error("Raw names string is empty, cannot parse")]
     EmptyRaw,
 }
 
-impl std::fmt::Display for ParseError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            ParseError::EmptyRaw => {
-                write!(f, "Raw names string is empty, cannot parse")
-            }
-        }
-    }
-}
-
-#[derive(Debug)]
+#[derive(Error, Debug)]
 pub enum FetchError {
+    #[error("Failed to evaluate JS")]
     FailedEval,
+    #[error("Evaluated JS returned no value")]
     EvalNoValue,
 }
 
-impl std::fmt::Display for FetchError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            FetchError::FailedEval => write!(f, "Failed to evaluate JS"),
-            FetchError::EvalNoValue => write!(f, "Evaluated JS returned no value"),
-        }
-    }
-}
-
-#[derive(Debug, PartialEq)]
+#[derive(Error, Debug, PartialEq)]
 pub enum ProcessResultError {
+    #[error("Failed to get next part of availability matrix: {section}")]
     AvailMatrixNoNext { section: String },
+    #[error("Failed to parse timestamp from availability matrix: {timestamp}")]
     AvailMatrixFailedTimestampParse { timestamp: String },
 }
 
-impl std::fmt::Display for ProcessResultError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            ProcessResultError::AvailMatrixNoNext { section } => {
-                write!(
-                    f,
-                    "Failed to get next part of availability matrix: {:?}",
-                    section
-                )
-            }
-            ProcessResultError::AvailMatrixFailedTimestampParse { timestamp } => write!(
-                f,
-                "Failed to parse timestamp from availability matrix: {}",
-                timestamp
-            ),
-        }
-    }
-}
-
-#[derive(Debug)]
+#[derive(Error, Debug)]
 pub enum HeadlessChromeError {
+    #[error("Failed to launch headless chrome")]
     FailedToLaunch,
+    #[error("Failed to create new tab")]
     FailedToNewTab,
+    #[error("Failed to navigate to URL")]
     FailedToNavigate,
+    #[error("Failed to wait until navigated")]
     FailedToWaitUntilNavigated,
 }
 
-impl std::fmt::Display for HeadlessChromeError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            HeadlessChromeError::FailedToLaunch => write!(f, "Failed to launch headless chrome"),
-            HeadlessChromeError::FailedToNewTab => write!(f, "Failed to create new tab"),
-            HeadlessChromeError::FailedToNavigate => write!(f, "Failed to navigate to URL"),
-            HeadlessChromeError::FailedToWaitUntilNavigated => {
-                write!(f, "Failed to wait until navigated")
-            }
-        }
-    }
-}
-
-#[derive(Debug)]
+#[derive(Error, Debug)]
 pub enum ParseWhen2MeetError {
+    #[error("Fetch error: {0}")]
     Fetch(FetchError),
+    #[error("Parse error: {0}")]
     Parse(ParseError),
+    #[error("Process result error: {0}")]
     ProcessResult(ProcessResultError),
+    #[error("Headless Chrome error: {0}")]
     HeadlessChrome(HeadlessChromeError),
-}
-
-impl std::fmt::Display for ParseWhen2MeetError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            ParseWhen2MeetError::Fetch(fetch_error) => write!(f, "Fetch error: {}", fetch_error),
-            ParseWhen2MeetError::Parse(parse_error) => write!(f, "Parse error: {}", parse_error),
-            ParseWhen2MeetError::ProcessResult(process_result_error) => {
-                write!(f, "Process result error: {}", process_result_error)
-            }
-            ParseWhen2MeetError::HeadlessChrome(headless_chrome_error) => {
-                write!(f, "Headless chrome error: {}", headless_chrome_error)
-            }
-        }
-    }
 }

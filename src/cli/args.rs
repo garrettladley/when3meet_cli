@@ -18,5 +18,5 @@ pub struct Args {
 
     /// The output file path. If not provided, it will be printed to stdout.
     #[arg(short, long, required = false)]
-    pub output_file_path: Option<String>,
+    pub output_file_path: Option<std::path::PathBuf>,
 }
