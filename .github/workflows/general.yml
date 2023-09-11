@@ -76,7 +76,6 @@ jobs:
         include:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-musl
-            args: --features openssl-vendored
             bin: target/debug/when3meet
           - os: windows-latest
             target: x86_64-pc-windows-msvc
@@ -89,7 +88,7 @@ jobs:
         uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@stable
       - name: Build
-        run: cargo build --release --manifest-path ./Cargo.toml ${{ matrix.args }}
+        run: cargo build --release --manifest-path ./Cargo.toml --target ${{ matrix.target }}
       - uses: Swatinem/rust-cache@v2
         with:
           key: cargo-${{ hashFiles('**/Cargo.lock') }}-${{matrix.target}}
