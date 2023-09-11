@@ -76,13 +76,10 @@ jobs:
         include:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-musl
-            bin: target/release/when3meet
           - os: windows-latest
             target: x86_64-pc-windows-msvc
-            bin: target/release/when3meet
           - os: macOS-latest
             target: x86_64-apple-darwin
-            bin: target/release/when3meet
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -93,7 +90,7 @@ jobs:
           target: ${{ matrix.target }}
           override: true
 
-      - uses: Swatinem/rust-cache@v1
+      - uses: Swatinem/rust-cache@v2
         with:
           key: ${{ runner.os }}-cli
 
@@ -105,4 +102,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: when3meet-${{ matrix.target }}
-          path: when3meet/${{ matrix.bin }}
+          path: ./target/release/when3meet
