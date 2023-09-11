@@ -89,7 +89,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --manifest-path .when3meet/Cargo.toml --bin when3meet ${{ matrix.args }}
+          args: --manifest-path when3meet/Cargo.toml --bin when3meet ${{ matrix.args }}
       - uses: Swatinem/rust-cache@v2
         with:
           key: cargo-${{ hashFiles('**/Cargo.lock') }}-${{matrix.target}}
