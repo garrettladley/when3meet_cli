@@ -87,7 +87,7 @@ jobs:
     steps:
       - uses: dtolnay/rust-toolchain@stable
       - name: Build
-        run: cargo build --release --manifest-path ./when3meet/when3meet/Cargo.toml ${{ matrix.args }}
+        run: cargo build --release --manifest-path ./Cargo.toml ${{ matrix.args }}
       - uses: Swatinem/rust-cache@v2
         with:
           key: cargo-${{ hashFiles('**/Cargo.lock') }}-${{matrix.target}}
