@@ -2,6 +2,14 @@
 name = "when3meet"
 version = "0.1.0"
 edition = "2021"
+authors = ["Garrett Ladley <garrett.ladley14@gmail.com>"]
+license = "GNU GPLv3"
+description = "CLI tool to find the optimal time to meet given a when2meet URL"
+readme = "README.md"
+homepage = "https://github.com/garrettladley/when3meet"
+repository = "https://github.com/garrettladley/when3meet"
+keywords = ["cli", "when2meet", "when3meet"]
+categories = ["command-line-utilities"]
 
 [lib]
 path = "src/lib.rs"
@@ -12,9 +20,7 @@ name = "when3meet"
 
 [dependencies]
 clap = { version = "4.4", features = ["derive"] }
-headless_chrome = { git = "https://github.com/atroche/rust-headless-chrome", features = [
-    "fetch",
-] }
+headless_chrome = { version = "1.0.5", features = ["fetch"] }
 url = "2.4"
 chrono = { version = "0.4.29", default-features = false, features = ["clock"] }
 chrono-tz = "0.8.3"
