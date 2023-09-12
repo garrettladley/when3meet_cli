@@ -90,4 +90,4 @@ Options:
 
 ## Contributing & Issues
 
-If you have any issues, feel free to open an issue or PR!
+If you have would like to contribute or encounter any issues, feel free to open PR or issue!
