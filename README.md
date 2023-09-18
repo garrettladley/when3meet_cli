@@ -76,8 +76,8 @@ Usage: when3meet [OPTIONS] --when2meet-url <WHEN2MEET_URL>
 Options:
   -r, --required-people <REQUIRED_PEOPLE>...
           The people required at the meeting. If not provided, assumed to be all people
-  -f, --flexible-naming <FLEXIBLE_NAMING>
-          Flexible naming. Perform case insensitive contains based matching [possible values: true, false]
+  -f, --flexible-naming
+          Perform case insensitive contains based matching on required people
   -w, --when2meet-url <WHEN2MEET_URL>
           The URL to the when2meet page
   -o, --output-file-path <OUTPUT_FILE_PATH>
