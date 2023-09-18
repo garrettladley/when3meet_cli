@@ -17,7 +17,7 @@ pub enum FetchError {
 #[derive(Error, Debug, PartialEq)]
 pub enum ProcessResultError {
     #[error("Failed to get next part of availability matrix: {section}")]
-    AvailMatrixNoNext { section: String },
+    AvailMatrixNoNext { section: Box<str> },
     #[error("Failed to parse timestamp from availability matrix: {timestamp}")]
     AvailMatrixFailedTimestampParse { timestamp: String },
 }

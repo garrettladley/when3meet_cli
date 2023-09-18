@@ -10,11 +10,7 @@ use when3meet::output::write_slots;
 fn main() -> Result<()> {
     let args = Args::parse();
     let slots = parse_when2meet(&args.when2meet_url)?;
-    let slots = find_opt(
-        &slots,
-        &args.required_people.unwrap_or(vec![]),
-        &args.flexible_naming.unwrap_or(false),
-    );
+    let slots = find_opt(&slots, &args.required_people, &args.flexible_naming);
 
     match args.output_file_path {
         Some(path) => {

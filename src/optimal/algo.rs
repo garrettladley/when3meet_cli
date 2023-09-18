@@ -17,7 +17,7 @@ pub fn find_opt<'a>(
                                 .to_lowercase()
                                 .contains(&required_name.to_lowercase())
                         } else {
-                            slot_person.name == *required_name
+                            &*slot_person.name == required_name
                         };
                         name_match && slot_person.available
                     })
@@ -59,15 +59,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -78,15 +78,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -97,15 +97,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -124,7 +124,7 @@ mod tests {
             opt[0]
                 .people
                 .iter()
-                .find(|person| person.name == *"Muneer")
+                .find(|person| &*person.name == "Muneer")
                 .unwrap()
                 .available
         );
@@ -133,7 +133,7 @@ mod tests {
             opt[0]
                 .people
                 .iter()
-                .find(|person| person.name == *"Brian")
+                .find(|person| &*person.name == "Brian")
                 .unwrap()
                 .available
         );
@@ -148,15 +148,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -167,15 +167,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -186,15 +186,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -219,15 +219,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: true,
                     },
                 ],
@@ -238,15 +238,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: true,
                     },
                 ],
@@ -257,15 +257,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: true,
                     },
                 ],
@@ -294,15 +294,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -313,15 +313,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -332,15 +332,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -369,15 +369,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -388,15 +388,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -407,15 +407,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -426,15 +426,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: true,
                     },
                 ],
@@ -475,15 +475,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: true,
                     },
                 ],
@@ -494,15 +494,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -513,15 +513,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -532,15 +532,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -551,15 +551,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: true,
                     },
                 ],
@@ -601,15 +601,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: " mUnEeR lAlJi ".to_string(),
+                        name: " mUnEeR lAlJi ".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: " reicher, brian".to_string(),
+                        name: " reicher, brian".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -620,15 +620,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: " mUnEeR lAlJi ".to_string(),
+                        name: " mUnEeR lAlJi ".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: " reicher, brian".to_string(),
+                        name: " reicher, brian".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -639,15 +639,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: " mUnEeR lAlJi ".to_string(),
+                        name: " mUnEeR lAlJi ".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: " reicher, brian".to_string(),
+                        name: " reicher, brian".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -666,7 +666,7 @@ mod tests {
             opt[0]
                 .people
                 .iter()
-                .find(|person| person.name == *" mUnEeR lAlJi ")
+                .find(|person| &*person.name == " mUnEeR lAlJi ")
                 .unwrap()
                 .available
         );
@@ -675,7 +675,7 @@ mod tests {
             opt[0]
                 .people
                 .iter()
-                .find(|person| person.name == *" reicher, brian")
+                .find(|person| &*person.name == " reicher, brian")
                 .unwrap()
                 .available
         );

@@ -75,8 +75,8 @@ pub fn parse_when2meet(url: &Url) -> Result<Vec<Slot>, ParseWhen2MeetError> {
 }
 
 fn process_names_and_matrix(
-    names: Vec<String>,
-    avail_matrix: Vec<String>,
+    names: Vec<Box<str>>,
+    avail_matrix: Vec<Box<str>>,
 ) -> Result<Vec<Slot>, ProcessResultError> {
     let mut slots = Vec::new();
 
@@ -101,7 +101,7 @@ fn process_names_and_matrix(
             .iter()
             .zip(parts)
             .map(|(name, available)| Person {
-                name: name.to_string(),
+                name: name.to_string().into_boxed_str(),
                 available: available == "1",
             })
             .collect();
@@ -132,14 +132,17 @@ fn fetch_people_names(tab: &Arc<Tab>) -> Result<String, FetchError> {
     Ok(raw_names)
 }
 
-fn parse_people_names_from_result(raw_names: String) -> Result<Vec<String>, ParseError> {
+fn parse_people_names_from_result(raw_names: String) -> Result<Vec<Box<str>>, ParseError> {
     if raw_names.len() <= 2 {
         return Err(ParseError::EmptyRaw);
     }
 
     let names = &raw_names[1..raw_names.len() - 1];
 
-    Ok(names.split(',').map(|x| x.to_string()).collect())
+    Ok(names
+        .split(',')
+        .map(|x| x.to_string().into_boxed_str())
+        .collect())
 }
 
 fn fetch_avail_matrix(tab: &Arc<Tab>) -> Result<String, FetchError> {
@@ -164,14 +167,17 @@ fn fetch_avail_matrix(tab: &Arc<Tab>) -> Result<String, FetchError> {
     Ok(raw_avail_matrix)
 }
 
-fn parse_avail_matrix_from_result(raw_avail_matrix: String) -> Result<Vec<String>, ParseError> {
+fn parse_avail_matrix_from_result(raw_avail_matrix: String) -> Result<Vec<Box<str>>, ParseError> {
     if raw_avail_matrix.len() <= 2 {
         return Err(ParseError::EmptyRaw);
     }
 
     let avail_matrix = &raw_avail_matrix[1..raw_avail_matrix.len() - 1];
 
-    Ok(avail_matrix.split('|').map(|x| x.to_string()).collect())
+    Ok(avail_matrix
+        .split('|')
+        .map(|x| x.to_string().into_boxed_str())
+        .collect())
 }
 
 #[cfg(test)]
@@ -195,9 +201,9 @@ mod tests {
         let avail_matrix = avail_matrix.unwrap();
 
         assert!(avail_matrix.len() == 3);
-        assert!(avail_matrix[0] == "1693746000,0,0,0");
-        assert!(avail_matrix[1] == "1693746900,1,0,0");
-        assert!(avail_matrix[2] == "1693747800,0,1,0");
+        assert!(avail_matrix[0] == "1693746000,0,0,0".to_string().into_boxed_str());
+        assert!(avail_matrix[1] == "1693746900,1,0,0".to_string().into_boxed_str());
+        assert!(avail_matrix[2] == "1693747800,0,1,0".to_string().into_boxed_str());
     }
 
     #[test]
@@ -224,9 +230,9 @@ mod tests {
         let names = names.unwrap();
 
         assert!(names.len() == 3);
-        assert!(names[0] == "Muneer");
-        assert!(names[1] == "Brian");
-        assert!(names[2] == "Garrett");
+        assert!(names[0] == "Muneer".to_string().into_boxed_str());
+        assert!(names[1] == "Brian".to_string().into_boxed_str());
+        assert!(names[2] == "Garrett".to_string().into_boxed_str());
     }
 
     #[test]
@@ -245,15 +251,15 @@ mod tests {
     #[test]
     fn test_process_names_and_matrix_valid() {
         let names = vec![
-            "Muneer".to_string(),
-            "Brian".to_string(),
-            "Garrett".to_string(),
+            "Muneer".to_string().into_boxed_str(),
+            "Brian".to_string().into_boxed_str(),
+            "Garrett".to_string().into_boxed_str(),
         ];
 
         let avail_matrix = vec![
-            "1693746000,0,0,0".to_string(),
-            "1693746900,1,0,0".to_string(),
-            "1693747800,0,1,0".to_string(),
+            "1693746000,0,0,0".to_string().into_boxed_str(),
+            "1693746900,1,0,0".to_string().into_boxed_str(),
+            "1693747800,0,1,0".to_string().into_boxed_str(),
         ];
 
         let slots = process_names_and_matrix(names, avail_matrix);
@@ -271,15 +277,15 @@ mod tests {
                         .with_timezone(&Utc),
                     vec![
                         Person {
-                            name: "Muneer".to_string(),
+                            name: "Muneer".to_string().into_boxed_str(),
                             available: false
                         },
                         Person {
-                            name: "Brian".to_string(),
+                            name: "Brian".to_string().into_boxed_str(),
                             available: false
                         },
                         Person {
-                            name: "Garrett".to_string(),
+                            name: "Garrett".to_string().into_boxed_str(),
                             available: false
                         }
                     ]
@@ -293,15 +299,15 @@ mod tests {
                         .with_timezone(&Utc),
                     vec![
                         Person {
-                            name: "Muneer".to_string(),
+                            name: "Muneer".to_string().into_boxed_str(),
                             available: true
                         },
                         Person {
-                            name: "Brian".to_string(),
+                            name: "Brian".to_string().into_boxed_str(),
                             available: false
                         },
                         Person {
-                            name: "Garrett".to_string(),
+                            name: "Garrett".to_string().into_boxed_str(),
                             available: false
                         }
                     ]
@@ -315,15 +321,15 @@ mod tests {
                         .with_timezone(&Utc),
                     vec![
                         Person {
-                            name: "Muneer".to_string(),
+                            name: "Muneer".to_string().into_boxed_str(),
                             available: false
                         },
                         Person {
-                            name: "Brian".to_string(),
+                            name: "Brian".to_string().into_boxed_str(),
                             available: true
                         },
                         Person {
-                            name: "Garrett".to_string(),
+                            name: "Garrett".to_string().into_boxed_str(),
                             available: false
                         }
                     ]
@@ -334,12 +340,12 @@ mod tests {
     #[test]
     fn test_process_names_and_matrix_bad_timestamp() {
         let names = vec![
-            "Muneer".to_string(),
-            "Brian".to_string(),
-            "Garrett".to_string(),
+            "Muneer".to_string().into_boxed_str(),
+            "Brian".to_string().into_boxed_str(),
+            "Garrett".to_string().into_boxed_str(),
         ];
 
-        let avail_matrix = vec!["".to_string()];
+        let avail_matrix = vec!["".to_string().into_boxed_str()];
 
         let slots = process_names_and_matrix(names, avail_matrix);
 

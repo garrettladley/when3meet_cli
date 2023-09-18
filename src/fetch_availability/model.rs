@@ -11,7 +11,7 @@ pub struct Slot {
 
 #[derive(Debug, PartialEq)]
 pub struct Person {
-    pub name: String,
+    pub name: Box<str>,
     pub available: bool,
 }
 
@@ -104,15 +104,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -123,15 +123,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -142,15 +142,15 @@ mod tests {
                     .with_timezone(&Utc),
                 vec![
                     Person {
-                        name: "Muneer".to_string(),
+                        name: "Muneer".to_string().into_boxed_str(),
                         available: true,
                     },
                     Person {
-                        name: "Brian".to_string(),
+                        name: "Brian".to_string().into_boxed_str(),
                         available: false,
                     },
                     Person {
-                        name: "Garrett".to_string(),
+                        name: "Garrett".to_string().into_boxed_str(),
                         available: false,
                     },
                 ],
@@ -171,15 +171,15 @@ mod tests {
                         .with_timezone(&Utc),
                     people: vec![
                         Person {
-                            name: "Muneer".to_string(),
+                            name: "Muneer".to_string().into_boxed_str(),
                             available: false,
                         },
                         Person {
-                            name: "Brian".to_string(),
+                            name: "Brian".to_string().into_boxed_str(),
                             available: false,
                         },
                         Person {
-                            name: "Garrett".to_string(),
+                            name: "Garrett".to_string().into_boxed_str(),
                             available: false,
                         },
                     ],
@@ -190,15 +190,15 @@ mod tests {
                         .with_timezone(&Utc),
                     vec![
                         Person {
-                            name: "Muneer".to_string(),
+                            name: "Muneer".to_string().into_boxed_str(),
                             available: true,
                         },
                         Person {
-                            name: "Brian".to_string(),
+                            name: "Brian".to_string().into_boxed_str(),
                             available: false,
                         },
                         Person {
-                            name: "Garrett".to_string(),
+                            name: "Garrett".to_string().into_boxed_str(),
                             available: false,
                         },
                     ],
@@ -219,11 +219,11 @@ mod tests {
             end_time: Utc::now() + Duration::hours(2),
             people: vec![
                 Person {
-                    name: String::from("Muneer"),
+                    name: "Muneer".to_string().into_boxed_str(),
                     available: true,
                 },
                 Person {
-                    name: String::from("Garrett"),
+                    name: "Garrett".to_string().into_boxed_str(),
                     available: false,
                 },
             ],
