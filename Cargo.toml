@@ -20,7 +20,7 @@ name = "when3meet"
 
 [dependencies]
 clap = { version = "4.4", features = ["derive"] }
-headless_chrome = { version = "1.0.5", features = ["fetch"] }
+headless_chrome = { version = "1.0.6", features = ["fetch"] }
 url = "2.4"
 chrono = { version = "0.4.29", default-features = false, features = ["clock"] }
 chrono-tz = "0.8.3"
