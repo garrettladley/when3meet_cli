@@ -10,8 +10,8 @@
 
 <div align="center">
   <!-- Github Actions -->
-  <a href="https://github.com/garrettladley/when3meet/actions/workflows/general.yml">
-    <img src="https://github.com/garrettladley/when3meet/actions/workflows/general.yml/badge.svg"
+  <a href="https://github.com/garrettladley/when3meet_cli/actions/workflows/general.yml">
+    <img src="https://github.com/garrettladley/when3meet_cli/actions/workflows/general.yml/badge.svg"
       alt="actions status" />
   </a>
   <!-- Version -->

@@ -1,13 +1,13 @@
 [package]
 name = "when3meet"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 authors = ["Garrett Ladley <garrett.ladley14@gmail.com>"]
 license = "GPL-3.0-only"
 description = "CLI tool to find the optimal time to meet given a when2meet URL"
 readme = "README.md"
-homepage = "https://github.com/garrettladley/when3meet"
-repository = "https://github.com/garrettladley/when3meet"
+homepage = "https://github.com/garrettladley/when3meet_cli"
+repository = "https://github.com/garrettladley/when3meet_cli"
 keywords = ["cli", "when2meet", "when3meet"]
 categories = ["command-line-utilities"]
 
